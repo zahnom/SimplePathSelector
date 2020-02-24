@@ -15,7 +15,7 @@ namespace SimplePathSelectorTestsNamespace
         [TestMethod]
         public void SelectPathTest1()
         {
-            PathSelectorUnderTest.AddPathFor("test", new DummyClass1());
+            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass1());
 
             var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
 
@@ -25,7 +25,7 @@ namespace SimplePathSelectorTestsNamespace
         [TestMethod]
         public void SelectPathTest2()
         {
-            PathSelectorUnderTest.AddPathFor("test", new DummyClass2());
+            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass2());
 
             var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
 
@@ -35,7 +35,7 @@ namespace SimplePathSelectorTestsNamespace
         [TestMethod]
         public void SelectPathTest3()
         {
-            PathSelectorUnderTest.AddPathFor("test", new DummyClass3());
+            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass3());
 
             var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
 
@@ -45,9 +45,9 @@ namespace SimplePathSelectorTestsNamespace
         [TestMethod]
         public void SelectPathTestCorrectOrder()
         {
-            PathSelectorUnderTest.AddPathFor("test", new DummyClass3());
-            PathSelectorUnderTest.AddPathFor("test", new DummyClass2());
-            PathSelectorUnderTest.AddPathFor("test", new DummyClass1());
+            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass3());
+            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass2());
+            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass1());
 
             var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
 
@@ -57,10 +57,10 @@ namespace SimplePathSelectorTestsNamespace
         [TestMethod]
         public void SelectPathDifferentEntries()
         {
-            PathSelectorUnderTest.AddPathFor("test1", new DummyClass1());
-            PathSelectorUnderTest.AddPathFor("test2", new DummyClass2());
-            PathSelectorUnderTest.AddPathFor("test3", new DummyClass2());
-            PathSelectorUnderTest.AddPathFor("test3", new DummyClass3());
+            PathSelectorUnderTest.AddPathProviderFor("test1", new DummyClass1());
+            PathSelectorUnderTest.AddPathProviderFor("test2", new DummyClass2());
+            PathSelectorUnderTest.AddPathProviderFor("test3", new DummyClass2());
+            PathSelectorUnderTest.AddPathProviderFor("test3", new DummyClass3());
 
             var selectedPathForTest1 = PathSelectorUnderTest.SelectPathFor("test1");
             var selectedPathForTest2 = PathSelectorUnderTest.SelectPathFor("test2");

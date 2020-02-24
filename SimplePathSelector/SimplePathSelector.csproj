@@ -42,9 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassEqualityComparer.cs" />
+    <Compile Include="PathProviders\FromFunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimplePathSelector.cs" />
     <Compile Include="SimplePathSelectorExceptions.cs" />
+    <Compile Include="PathProviders\CurrentDirectory.cs" />
+    <Compile Include="PathProviders\DefaultValue.cs" />
+    <Compile Include="PathProviders\UserInput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

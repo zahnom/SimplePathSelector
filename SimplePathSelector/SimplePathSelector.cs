@@ -16,7 +16,7 @@ namespace SimplePathSelectorNamespace
             OrderOfPathProviders = orderOfPathProviders;
         }
 
-        public void AddPathFor(string id, object pathProvider)
+        public void AddPathProviderFor(string id, object pathProvider)
         {
             if (Paths.ContainsKey(id) == false)
                 Paths.Add(id, new List<object>());
