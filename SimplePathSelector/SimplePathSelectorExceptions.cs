@@ -8,13 +8,6 @@ namespace SimplePathSelectorNamespace
 {
     public class SimplePathSelectorExceptions
     {
-        public class InvalidPath : Exception
-        {
-            public InvalidPath() { }
-            public InvalidPath(string message) : base(message) { }
-            public InvalidPath(string message, Exception inner) : base(message, inner) { }
-        }
-
         public class NoPathsForThisEntry : Exception
         {
             public NoPathsForThisEntry() { }

@@ -7,10 +7,18 @@ namespace SimplePathSelectorTestsNamespace
     [TestClass]
     public class SimplePathSelectorNamespaceTests
     {
-        SimplePathSelector PathSelectorUnderTest = new SimplePathSelector(
+        SimplePathSelector PathSelectorUnderTest;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            PathSelectorUnderTest = new SimplePathSelector(
                 typeof(DummyClass1),
                 typeof(DummyClass2),
-                typeof(DummyClass3));
+                typeof(DummyClass3),
+                typeof(NoPathAvailableDummy),
+                typeof(InvalidPathDummy));
+        }
 
         [TestMethod]
         public void SelectPathTest1()
@@ -75,7 +83,45 @@ namespace SimplePathSelectorTestsNamespace
         [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsForThisEntry))]
         public void NoPathForEntry()
         {
-            var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
+            PathSelectorUnderTest.SelectPathFor("test");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(PathProviderExceptions.NoPathAvailable))]
+        public void NoPathAvailableExceptionFromProvider()
+        {
+            PathSelectorUnderTest.AddPathProviderFor("test", new NoPathAvailableDummy());
+            PathSelectorUnderTest.SilenceNoPathAvailableExceptions = false;
+
+            PathSelectorUnderTest.SelectPathFor("test");   
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsForThisEntry))]
+        public void SilenceNoPathAvailableExceptionFromProvider()
+        {
+            PathSelectorUnderTest.AddPathProviderFor("test", new NoPathAvailableDummy());
+
+            PathSelectorUnderTest.SelectPathFor("test");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(PathProviderExceptions.InvalidPath))]
+        public void InvalidPathExceptionFromProvider()
+        {
+            PathSelectorUnderTest.AddPathProviderFor("test", new InvalidPathDummy());
+
+            PathSelectorUnderTest.SelectPathFor("test");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsForThisEntry))]
+        public void SilenceInvalidPathExceptionFromProvider()
+        {
+            PathSelectorUnderTest.AddPathProviderFor("test", new InvalidPathDummy());
+            PathSelectorUnderTest.SilenceInvalidPathExceptions = true;
+
+            PathSelectorUnderTest.SelectPathFor("test");
         }
 
         private class DummyClass1 
@@ -97,6 +143,20 @@ namespace SimplePathSelectorTestsNamespace
             public override string ToString()
             {
                 return "DummyClass3";
+            }
+        }
+        private class NoPathAvailableDummy
+        {
+            public override string ToString()
+            {
+                throw new PathProviderExceptions.NoPathAvailable();
+            }
+        }
+        private class InvalidPathDummy
+        {
+            public override string ToString()
+            {
+                throw new PathProviderExceptions.InvalidPath();
             }
         }
     }

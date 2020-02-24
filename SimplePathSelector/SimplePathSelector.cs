@@ -8,13 +8,16 @@ namespace SimplePathSelectorNamespace
 {
     public class SimplePathSelector
     {
-        private Type[] OrderOfPathProviders;
-        private Dictionary<string, List<object>> Paths = new Dictionary<string,List<object>>();
+        public bool SilenceNoPathAvailableExceptions = true;
+        public bool SilenceInvalidPathExceptions = false;
 
         public SimplePathSelector(params Type[] orderOfPathProviders)
         {
             OrderOfPathProviders = orderOfPathProviders;
         }
+
+        private Type[] OrderOfPathProviders;
+        private Dictionary<string, List<object>> Paths = new Dictionary<string, List<object>>();
 
         public void AddPathProviderFor(string id, object pathProvider)
         {
@@ -23,6 +26,7 @@ namespace SimplePathSelectorNamespace
 
             Paths[id].Add(pathProvider);
         }
+        
         public IEnumerable<string> PathsFor(string id)
         {
             if (Paths.ContainsKey(id) == false)
@@ -36,12 +40,35 @@ namespace SimplePathSelectorNamespace
             foreach (var entry in OrderOfPathProviders)
             {
                 var result = paths.FirstOrDefault(x => x.GetType() == entry);
-                if (result != null) 
-                    selectedPaths.Add(result.ToString());
+                if (result == null)
+                    continue;
+
+                var path = GetPathFromPathProvider(result);
+                selectedPaths.Add(path);
             }
 
             return selectedPaths;
         }
+        private string GetPathFromPathProvider(object provider)
+        {
+            string path;
+            try
+            {
+                path = provider.ToString();
+            } catch(Exception e)
+            {
+                if (e.GetType() == typeof(PathProviderExceptions.NoPathAvailable) && SilenceNoPathAvailableExceptions)
+                    return null;
+
+                if (e.GetType() == typeof(PathProviderExceptions.InvalidPath) && SilenceInvalidPathExceptions)
+                    return null;
+
+                throw e;
+            }
+
+            return path;
+        }
+
         public string SelectPathFor(string id)
         {
             if (PathsFor(id).FirstOrDefault() == null)
