@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>zahnom.SimplePathSelector</id>
+    <version>1.0.0</version>
+    <title>SimplePathSelector</title>
+    <authors>Marc Zahno</authors>
+    <owners>Marc Zahno</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/zahnom/SimplePathSelector</projectUrl>
+    <description>Use this library if you have multiple sources for a path, e.g. user input, a configuration 
+	file and a default value and want to select one of these values based on some prioritization.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>Path</tags>
+  </metadata>
+</package>
