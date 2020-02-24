@@ -7,7 +7,7 @@
     <ProjectGuid>{79C12219-EA1F-4EBA-9D3E-E9B36587DBA3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimplePathSelector</RootNamespace>
+    <RootNamespace>SimplePathSelectorNamespace</RootNamespace>
     <AssemblyName>SimplePathSelector</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
