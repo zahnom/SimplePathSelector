@@ -17,7 +17,7 @@ myPathSelector.AddPathProviderFor("path-to-a-file", new DefaultValue(@"C:\some\d
 var pathToFile = myPathSelector.SelectPathFor("path-to-a-file");
 ```
 # Example: Current working directory as last choice
-When no user input is given for the entry called `"path-to-a-file"`, the current working directory is used. The current directory path provider is part of the SimplePathSelector library and can be found at [`SimplePathSelector/SimplePathSelector/PathProviders/`](https://github.com/zahnom/SimplePathSelector/tree/master/SimplePathSelector/PathProviders).
+When no user input is given for the entry called `"path-to-a-file"`, the current working directory is used. The `CurrentDirectory` path provider is part of the SimplePathSelector library and can be found at [`SimplePathSelector/SimplePathSelector/PathProviders/`](https://github.com/zahnom/SimplePathSelector/tree/master/SimplePathSelector/PathProviders).
 ```c#
 var myPathSelector = new SimplePathSelector(
   typeof(UserInput), typeof(CurrentDirectory));
