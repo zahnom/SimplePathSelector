@@ -1,5 +1,5 @@
 # SimplePathSelector
-Use the `SimplePathSelector` class if you have multiple sources for a path, e.g. user input, a configuration file and a default value. You can add all these sources to the path selector and define the order in which the values should be choosen. Use the examples below to get a quick start.
+Use the `SimplePathSelector` class if you have multiple sources for a path, e.g. user input, a configuration file and a default value. You can add all these sources to the path selector and define the order in which the values should be choosen. Use the examples below to get a quick start. The nuget package can be found at https://www.nuget.org/packages/zahnom.SimplePathSelector/.
 
 # Example: Simple use case
 In this example we create a new path selector that takes some user input when available and otherwise a default value. `UserInput` and `DefaultValue` are part of the SimplePathSelector library and can be found at [`SimplePathSelector/SimplePathSelector/PathProviders/`](https://github.com/zahnom/SimplePathSelector/tree/master/SimplePathSelector/PathProviders).
