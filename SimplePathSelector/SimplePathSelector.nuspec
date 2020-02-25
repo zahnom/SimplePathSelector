@@ -2,15 +2,16 @@
 <package >
   <metadata>
     <id>zahnom.SimplePathSelector</id>
-    <version>1.0.1</version>
+    <version>2.0.0</version>
     <title>SimplePathSelector</title>
     <authors>Marc Zahno</authors>
     <owners>Marc Zahno</owners>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/zahnom/SimplePathSelector</projectUrl>
-    <description>Use this library if you have multiple sources for a path, e.g. user input, a configuration 
-	file and a default value and want to select one of these values based on some prioritization.</description>
-    <releaseNotes>Downgraded used .NET framework version to 4.6.1.</releaseNotes>
+    <description>Use the SimplePathSelector class if you have multiple sources for a path, e.g. user input, a configuration 
+	file and a default value. It allows you to collect all values at a central place and define the order in which they 
+	are eventually choosen.</description>
+    <releaseNotes>Removed "entries" from public methods and added a path selector builder.</releaseNotes>
     <copyright>Copyright 2020</copyright>
     <tags>Path</tags>
   </metadata>
