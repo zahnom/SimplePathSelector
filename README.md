@@ -32,3 +32,14 @@ var pathToFile = myPathSelector.SelectPath();
 ```
 ## Using a path selector as provider
 It is also possible to use a path selector as path provider for another path selector.
+```c#
+var myFirstPathSelector = new SimplePathSelectorBuilder() 
+   .FirstChoice(typeof(UserInput))
+   .Otherwise(new DefaultValue(@"C:\some\default\path"))
+   .Create();
+
+var myOtherPathSelector = new SimplePathSelectorBuilder() 
+   .FirstChoice(myFirstPathSelector)
+   .Otherwise(new DefaultValue(@"some\default\path"))
+   .Create();
+```
