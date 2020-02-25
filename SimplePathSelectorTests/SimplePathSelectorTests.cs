@@ -5,123 +5,214 @@ using SimplePathSelectorNamespace;
 namespace SimplePathSelectorTestsNamespace
 {
     [TestClass]
-    public class SimplePathSelectorNamespaceTests
+    public class SimplePathSelectorTests
     {
-        SimplePathSelector PathSelectorUnderTest;
-
-        [TestInitialize]
-        public void Setup()
+        [TestClass]
+        public class NoPathsAvailableTests
         {
-            PathSelectorUnderTest = new SimplePathSelector(
-                typeof(DummyClass1),
-                typeof(DummyClass2),
-                typeof(DummyClass3),
-                typeof(NoPathAvailableDummy),
-                typeof(InvalidPathDummy));
+            SimplePathSelector PathSelectorUnderTest;
+
+            [TestInitialize]
+            public void Setup()
+            {
+                PathSelectorUnderTest = new SimplePathSelector(
+                    typeof(DummyClass1),
+                    typeof(DummyClass2),
+                    typeof(DummyClass3),
+                    typeof(NoPathAvailableDummy),
+                    typeof(InvalidPathDummy));
+
+                PathSelectorUnderTest.AddProvider(new NoPathAvailableDummy());
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsAvailable))]
+            public void NoPathsAvailable()
+            {
+                PathSelectorUnderTest.SelectPath();
+            }
+
+            [TestMethod]
+            public void PathsListShouldBeEmpty()
+            {
+                Assert.AreEqual(0, PathSelectorUnderTest.Paths.Count);
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsAvailable))]
+            public void SilenceInvalidPathExceptionFromProvider()
+            {
+                PathSelectorUnderTest.AddProvider(new InvalidPathDummy());
+                PathSelectorUnderTest.SilenceInvalidPathExceptions = true;
+
+                PathSelectorUnderTest.SelectPath();
+            }
         }
 
-        [TestMethod]
-        public void SelectPathTest1()
+        [TestClass]
+        public class PathSelectionTests
         {
-            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass1());
+            SimplePathSelector PathSelectorUnderTest;
 
-            var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
+            [TestInitialize]
+            public void Setup()
+            {
+                PathSelectorUnderTest = new SimplePathSelector(
+                    typeof(DummyClass1),
+                    typeof(DummyClass2),
+                    typeof(DummyClass3),
+                    typeof(NoPathAvailableDummy),
+                    typeof(InvalidPathDummy));
+            }
 
-            Assert.AreEqual("DummyClass1", selectedPath);
+            [TestMethod]
+            public void SelectPathTest1()
+            {
+                PathSelectorUnderTest.AddProvider(new DummyClass1());
+
+                var selectedPath = PathSelectorUnderTest.SelectPath();
+
+                Assert.AreEqual("DummyClass1", selectedPath);
+            }
+
+            [TestMethod]
+            public void SelectPathTest2()
+            {
+                PathSelectorUnderTest.AddProvider(new DummyClass2());
+
+                var selectedPath = PathSelectorUnderTest.SelectPath();
+
+                Assert.AreEqual("DummyClass2", selectedPath);
+            }
+
+            [TestMethod]
+            public void SelectPathTest3()
+            {
+                PathSelectorUnderTest.AddProvider(new DummyClass3());
+
+                var selectedPath = PathSelectorUnderTest.SelectPath();
+
+                Assert.AreEqual("DummyClass3", selectedPath);
+            }
+
+            [TestMethod]
+            public void SelectPathTestCorrectOrder()
+            {
+                PathSelectorUnderTest.AddProvider(new DummyClass3());
+                PathSelectorUnderTest.AddProvider(new DummyClass2());
+                PathSelectorUnderTest.AddProvider(new DummyClass1());
+
+                var selectedPath = PathSelectorUnderTest.SelectPath();
+
+                Assert.AreEqual("DummyClass1", selectedPath);
+            }
         }
 
-        [TestMethod]
-        public void SelectPathTest2()
+        [TestClass]
+        public class NoPathAvailableFromProvider
         {
-            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass2());
+            SimplePathSelector PathSelectorUnderTest;
 
-            var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
+            [TestInitialize]
+            public void Setup()
+            {
+                PathSelectorUnderTest = new SimplePathSelector(
+                    typeof(DummyClass1),
+                    typeof(DummyClass2),
+                    typeof(DummyClass3),
+                    typeof(NoPathAvailableDummy),
+                    typeof(InvalidPathDummy));
 
-            Assert.AreEqual("DummyClass2", selectedPath);
+                PathSelectorUnderTest.AddProvider(new NoPathAvailableDummy());
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(PathProviderExceptions.NoPathAvailable))]
+            public void NoPathAvailableExceptionFromProvider1()
+            {
+                PathSelectorUnderTest.SilenceNoPathAvailableExceptions = false;
+                PathSelectorUnderTest.SelectPath();
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(PathProviderExceptions.NoPathAvailable))]
+            public void NoPathAvailableExceptionFromProvider2()
+            {
+                PathSelectorUnderTest.SilenceNoPathAvailableExceptions = false;
+                var result = PathSelectorUnderTest.Paths;
+            }
+
+            [TestMethod]
+            [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsAvailable))]
+            public void IgnoreNoPathAvailableException1()
+            {
+                PathSelectorUnderTest.SelectPath();
+            }
+
+            [TestMethod]
+            public void IgnoreNoPathAvailableException2()
+            {
+                var result = PathSelectorUnderTest.Paths;
+            }
         }
 
-        [TestMethod]
-        public void SelectPathTest3()
+        [TestClass]
+        public class InvalidPathTests
         {
-            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass3());
+            SimplePathSelector PathSelectorUnderTest;
 
-            var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
+            [TestInitialize]
+            public void Setup()
+            {
+                PathSelectorUnderTest = new SimplePathSelector(
+                    typeof(DummyClass1),
+                    typeof(DummyClass2),
+                    typeof(DummyClass3),
+                    typeof(NoPathAvailableDummy),
+                    typeof(InvalidPathDummy));
+            }
 
-            Assert.AreEqual("DummyClass3", selectedPath);
+            [TestMethod]
+            [ExpectedException(typeof(PathProviderExceptions.InvalidPath))]
+            public void InvalidPathExceptionFromProvider()
+            {
+                PathSelectorUnderTest.AddProvider(new InvalidPathDummy());
+                PathSelectorUnderTest.SelectPath();
+            }
         }
 
-        [TestMethod]
-        public void SelectPathTestCorrectOrder()
+        [TestClass]
+        public class CastingTests
         {
-            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass3());
-            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass2());
-            PathSelectorUnderTest.AddPathProviderFor("test", new DummyClass1());
+            SimplePathSelector PathSelectorUnderTest;
 
-            var selectedPath = PathSelectorUnderTest.SelectPathFor("test");
+            [TestInitialize]
+            public void Setup()
+            {
+                PathSelectorUnderTest = new SimplePathSelector(
+                    typeof(DummyClass1),
+                    typeof(DummyClass2),
+                    typeof(DummyClass3),
+                    typeof(NoPathAvailableDummy),
+                    typeof(InvalidPathDummy));
 
-            Assert.AreEqual("DummyClass1", selectedPath);
-        }
+                PathSelectorUnderTest.AddProvider(new NoPathAvailableDummy());
+                PathSelectorUnderTest.AddProvider(new DummyClass3());
+                PathSelectorUnderTest.AddProvider(new DummyClass2());
+                PathSelectorUnderTest.AddProvider(new DummyClass1());
+            }
 
-        [TestMethod]
-        public void SelectPathDifferentEntries()
-        {
-            PathSelectorUnderTest.AddPathProviderFor("test1", new DummyClass1());
-            PathSelectorUnderTest.AddPathProviderFor("test2", new DummyClass2());
-            PathSelectorUnderTest.AddPathProviderFor("test3", new DummyClass2());
-            PathSelectorUnderTest.AddPathProviderFor("test3", new DummyClass3());
+            [TestMethod]
+            public void ImplicitCasting()
+            {
+                Assert.AreEqual("DummyClass1", PathSelectorUnderTest);
+            }
 
-            var selectedPathForTest1 = PathSelectorUnderTest.SelectPathFor("test1");
-            var selectedPathForTest2 = PathSelectorUnderTest.SelectPathFor("test2");
-            var selectedPathForTest3 = PathSelectorUnderTest.SelectPathFor("test3");
-
-            Assert.AreEqual("DummyClass1", selectedPathForTest1);
-            Assert.AreEqual("DummyClass2", selectedPathForTest2);
-            Assert.AreEqual("DummyClass2", selectedPathForTest3);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsForThisEntry))]
-        public void NoPathForEntry()
-        {
-            PathSelectorUnderTest.SelectPathFor("test");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(PathProviderExceptions.NoPathAvailable))]
-        public void NoPathAvailableExceptionFromProvider()
-        {
-            PathSelectorUnderTest.AddPathProviderFor("test", new NoPathAvailableDummy());
-            PathSelectorUnderTest.SilenceNoPathAvailableExceptions = false;
-
-            PathSelectorUnderTest.SelectPathFor("test");   
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsForThisEntry))]
-        public void SilenceNoPathAvailableExceptionFromProvider()
-        {
-            PathSelectorUnderTest.AddPathProviderFor("test", new NoPathAvailableDummy());
-
-            PathSelectorUnderTest.SelectPathFor("test");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(PathProviderExceptions.InvalidPath))]
-        public void InvalidPathExceptionFromProvider()
-        {
-            PathSelectorUnderTest.AddPathProviderFor("test", new InvalidPathDummy());
-
-            PathSelectorUnderTest.SelectPathFor("test");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsForThisEntry))]
-        public void SilenceInvalidPathExceptionFromProvider()
-        {
-            PathSelectorUnderTest.AddPathProviderFor("test", new InvalidPathDummy());
-            PathSelectorUnderTest.SilenceInvalidPathExceptions = true;
-
-            PathSelectorUnderTest.SelectPathFor("test");
+            [TestMethod]
+            public void ToStringTest()
+            {
+                Assert.AreEqual("DummyClass1", PathSelectorUnderTest.ToString());
+            }
         }
 
         private class DummyClass1 

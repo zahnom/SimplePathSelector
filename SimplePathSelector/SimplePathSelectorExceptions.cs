@@ -8,11 +8,11 @@ namespace SimplePathSelectorNamespace
 {
     public class SimplePathSelectorExceptions
     {
-        public class NoPathsForThisEntry : Exception
+        public class NoPathsAvailable : Exception
         {
-            public NoPathsForThisEntry() { }
-            public NoPathsForThisEntry(string message) : base(message) { }
-            public NoPathsForThisEntry(string message, Exception inner) : base(message, inner) { }
+            public NoPathsAvailable() { }
+            public NoPathsAvailable(string message) : base(message) { }
+            public NoPathsAvailable(string message, Exception inner) : base(message, inner) { }
         }
     }
 }
