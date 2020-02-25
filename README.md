@@ -11,7 +11,7 @@ In this example we create a new path selector that takes some user input when av
 // is prefered over the default value.
 var myPathSelector =  new SimplePathSelectorBuilder()
     .FirstChoice(typeof(UserInput))
-    .Otherwise(new DefaultValue(@"C:\some\dir\""))
+    .Otherwise(new DefaultValue(@"C:\some\dir\"))
     .Create();
 
 myPathSelector.AddPathProvider(new UserInput(inputOfUser));
