@@ -17,22 +17,16 @@ namespace SimplePathSelectorNamespace
         }
 
         private Type[] OrderOfPathProviders;
-        private Dictionary<string, List<object>> Paths = new Dictionary<string, List<object>>();
+        private List<object> PathProviders = new List<object>();
 
-        public void AddPathProviderFor(string id, object pathProvider)
+        public void AddProvider(object pathProvider)
         {
-            if (Paths.ContainsKey(id) == false)
-                Paths.Add(id, new List<object>());
-
-            Paths[id].Add(pathProvider);
+            PathProviders.Add(pathProvider);
         }
         
-        public IEnumerable<string> PathsFor(string id)
+        public IEnumerable<string> GetPaths()
         {
-            if (Paths.ContainsKey(id) == false)
-                return new List<string>();
-
-            var paths = Paths[id]
+            var paths = PathProviders
                 .Distinct(new ClassEqualityComparer())
                 .ToList();
 
@@ -69,12 +63,12 @@ namespace SimplePathSelectorNamespace
             return path;
         }
 
-        public string SelectPathFor(string id)
+        public string SelectPath()
         {
-            if (PathsFor(id).FirstOrDefault() == null)
+            if (GetPaths().FirstOrDefault() == null)
                 throw new SimplePathSelectorExceptions.NoPathsForThisEntry();
 
-            return PathsFor(id).First();
+            return GetPaths().First();
         }
     }
 }
