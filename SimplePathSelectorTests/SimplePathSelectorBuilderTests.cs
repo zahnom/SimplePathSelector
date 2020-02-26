@@ -21,6 +21,17 @@ namespace SimplePathSelectorBuilderTests
         }
 
         [TestMethod]
+        public void OtherwiseOptionShortNotation()
+        {
+            var selector = new SimplePathSelectorBuilder()
+                .FirstChoice(typeof(DummyClass1))
+                .Otherwise(@"C:\some\default\path\")
+                .Create();
+
+            Assert.AreEqual(@"C:\some\default\path\", selector.SelectPath());
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(SimplePathSelectorExceptions.NoPathsAvailable))]
         public void NoProviders()
         {
